@@ -1,12 +1,72 @@
+import { useState, useEffect, useRef } from 'react';
+import { CodeChefLogo } from "./CodeChefLogo"
+import { Link, useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
+import { ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Moon, Sun } from 'lucide-react';
+import { getRoutes } from '../../utils/heplerFunctions';
+import { profileDropdownSection, defaultProfileImageUrl } from '../../utils/constants';
 
-const Navbar =()=>{
-    return (
+const Navbar = ({darkTheme, handleThemeChange}) => {
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector(state => state.authSlice);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const avatarButtonRef = useRef(null);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(prev => !prev);
+  };
+
+  const handleProfileItemClick = (action) => {
+    navigate(getRoutes(action));
+    setIsProfileDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        avatarButtonRef.current &&
+        !avatarButtonRef.current.contains(event.target)
+      ) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+
+    if (isProfileDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isProfileDropdownOpen]);
+
+
+  const navLinks = [
+    { name: 'Problems', href: '/problems' },
+    { name: 'Contests', href: '/contests' },
+    { name: 'Leaderboard', href: '/leaderboard' },
+    { name: 'Courses', href: '/courses' },
+  ];
+
+  return (
     <nav className="bg-white/80 dark:bg-gray-800/70 backdrop-blur-lg shadow-lg dark:shadow-xl fixed w-full z-50 top-0 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link to="/" className="flex items-center" aria-label="HackForge Home">
-            <HackForgeLogo size={7} className="" /> 
-            <span className="font-bold text-2xl text-slate-800 dark:text-white ml-3 tracking-tight">HackForge</span>
+          <Link to="/" className="flex items-center" aria-label="CodeChef Home">
+            <CodeChefLogo size={7} className="" /> 
+            <span className="font-bold text-2xl text-slate-800 dark:text-white ml-3 tracking-tight">CodeChef</span>
           </Link>
           <div className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => (

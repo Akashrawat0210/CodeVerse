@@ -5,20 +5,20 @@ import Navbar from './components/shared/Navbar';
 
 function App(){
 
-const [darkTheme, setDarkTheme] = useState(localStorage.getItem("theme") || "dark");
-  const { loading, isAuthenticated } = useSelector(state => state.authSlice);
-  const dispatch = useDispatch();
+// const [darkTheme, setDarkTheme] = useState(localStorage.getItem("theme") || "dark");
+//   const { loading, isAuthenticated } = useSelector(state => state.authSlice);
+//   const dispatch = useDispatch();
 
 
-  useEffect(() => {
-    dispatch(authenticateUser());
-  }, []);
+//   useEffect(() => {
+//     dispatch(authenticateUser());
+//   }, []);
 
-  const  handleThemeChange = useCallback(() => {  
-      const theme = darkTheme ? "light" : "dark";
-      localStorage.setItem("theme", theme);
-      setDarkTheme(!darkTheme);
-  }, [darkTheme]);
+//   const  handleThemeChange = useCallback(() => {  
+//       const theme = darkTheme ? "light" : "dark";
+//       localStorage.setItem("theme", theme);
+//       setDarkTheme(!darkTheme);
+//   }, [darkTheme]);
 
   return(
     // <>
